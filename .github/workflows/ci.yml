@@ -16,14 +16,32 @@ jobs:
         with:
           python-version: "3.13"
 
+      - name: Cache Poetry
+        id: cache-poetry
+        uses: actions/cache@v4
+        with:
+          key: poetry-1.8.5
+          path: ~/.local/ # poetry 는 ~/.local 에 설치되므로, 해당 디렉터리를 캐시한다.
+
       - name: Install Poetry
+        if: steps.cache-poetry.outputs.cache-hit != 'ture' # cache 불러오기 실패 > 설치
         run: |
           curl -sSL https://install.python-poetry.org | python3 - --version 1.8.5
 
       - name: Register Poetry bin
         run: echo "${HOME}/.poetry/bin" >> $GITHUB_PATH # 경로 지정
 
+      - name: Cache dependencies
+        id: cache-venv
+        uses: actions/cache@v4
+        with:
+          # 파이썬 버전이 바뀌었을 때, lock 파일이나 toml 파일이 바뀌었을때 종속성을 재설치합니다.
+          # 바뀐 것이 없는 경우에는 캐싱된 종속성을 사용합니다.
+          key: python-${{ steps.setup-python.outputs.python-version }}-poetry-lock-${{ hashFiles('poetry.lock') }}-toml-${{ hashFiles('pyproject.toml') }}-poetry-1.8.5
+          path: /home/runner/.cache/pypoetry/virtualenvs/
+
       - name: Install dependencies
+        if: steps.cache-venv.outputs.cache-hit != 'true'
         run: poetry install --no-root
 
       - name: Run Black
