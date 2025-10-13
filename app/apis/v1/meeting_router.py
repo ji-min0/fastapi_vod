@@ -1,10 +1,9 @@
-from datetime import datetime
 
 from fastapi import APIRouter, HTTPException
 from starlette.status import (
+    HTTP_204_NO_CONTENT,
     HTTP_404_NOT_FOUND,
     HTTP_422_UNPROCESSABLE_CONTENT,
-    HTTP_204_NO_CONTENT,
 )
 
 from app.dtos.create_meeting_response import CreateMeetingResponse
@@ -12,8 +11,8 @@ from app.dtos.get_meeting_response import GetMeetingResponse
 from app.dtos.update_meeting_request import (
     MEETING_DATE_MAX_RANGE,
     UpdateMeetingDateRangeRequest,
-    UpdateMeetingTitleRequest,
     UpdateMeetingLocationRequest,
+    UpdateMeetingTitleRequest,
 )
 from app.services.meeting_service_edgedb import (
     service_create_meeting_edgedb,

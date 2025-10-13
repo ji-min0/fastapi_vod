@@ -60,7 +60,6 @@ async def test_api_get_meeting() -> None:
     assert response_body["location"] == ""
 
 
-
 async def test_api_get_meeting_404() -> None:
     # Given
     async with httpx.AsyncClient(transport=httpx.ASGITransport(app=app), base_url="http://test") as client:
