@@ -95,23 +95,19 @@ jobs:
         if: steps.cache-venv.outputs.cache-hit != 'true'
         run: poetry install --no-root
 
-#      - name: Setup edgedb
-#        uses: geldata/setup-gel@v1
-
       - name: Cache EdgeDB CLI
         id: cache-edgedb-cli
         uses: actions/cache@v4
         with:
           key: edgedb-cli-v1-${{ runner.os }} # 운영체제별로 다르게!
-          path: ~/.local/bin/edgedb
+          path: ~/.edgedb
 
-      - name: Install EdgeDB CLI
+      - name: Setup edgedb
         if: steps.cache-edgedb-cli.outputs.cache-hit != 'true'
-        run: |
-          curl --proto '=https' --tlsv1.2 -sSfL https://geldata.com/sh | sh -s --y
+        uses: geldata/setup-gel@v1
 
       - name: Register EdgeDB bin
-        run: echo "$HOME/.local/bin" >> $GITHUB_PATH
+        run: echo "$HOME/.edgedb/bin" >> $GITHUB_PATH
 
       - name: Run tests
         run: |
