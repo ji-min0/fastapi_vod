@@ -44,10 +44,10 @@ async def api_get_meeting_edgedb(meeting_url_code: str) -> GetMeetingResponse:
         )
     return GetMeetingResponse(
         url_code=meeting.url_code,
-        end_date=datetime.now().date(),
-        start_date=datetime.now().date(),
-        title="test",
-        location="test",
+        end_date=meeting.end_date,
+        start_date=meeting.start_date,
+        title=meeting.title,
+        location=meeting.location,
     )
 
 

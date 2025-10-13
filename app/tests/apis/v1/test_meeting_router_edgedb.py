@@ -38,21 +38,27 @@ async def test_api_create_meeting_edgedb() -> None:
 
 async def test_api_get_meeting() -> None:
     # Given
-    async with httpx.AsyncClient(transport=httpx.ASGITransport(app=app), base_url="http://test") as client:
+    async with httpx.AsyncClient(
+        transport=httpx.ASGITransport(app=app),
+        base_url="http://test",
+    ) as client:
         create_meeting_response = await client.post(
             url="/v1/edgedb/meetings",
         )
         url_code = create_meeting_response.json()["url_code"]
 
         # When
-        response = await client.get(
-            url=f"/v1/edgedb/meetings/{url_code}",
-        )
+        response = await client.get(url=f"/v1/edgedb/meetings/{url_code}")
 
     # Then
     assert response.status_code == HTTP_200_OK
     response_body = response.json()
     assert response_body["url_code"] == url_code
+    assert response_body["start_date"] is None
+    assert response_body["end_date"] is None
+    assert response_body["title"] == ""
+    assert response_body["location"] == ""
+
 
 
 async def test_api_get_meeting_404() -> None:
