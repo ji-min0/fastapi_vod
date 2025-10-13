@@ -108,7 +108,7 @@ jobs:
       - name: Install EdgeDB CLI
         if: steps.cache-edgedb-cli.outputs.cache-hit != 'true'
         run: |
-          curl --proto '=https' --tlsv1.2 -sSfL https://geldata.com/sh | sh
+          curl --proto '=https' --tlsv1.2 -sSfL https://geldata.com/sh | sh -s --y
 
       - name: Register EdgeDB bin
         run: echo "$HOME/.local/bin" >> $GITHUB_PATH
