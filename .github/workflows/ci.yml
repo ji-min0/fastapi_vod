@@ -96,7 +96,7 @@ jobs:
         run: poetry install --no-root
 
       - name: Setup edgedb
-        uses: edgedb/setup-edgedb@v1
+        uses: geldata/setup-gel@v1
 
       - name: Run tests
         run: |
