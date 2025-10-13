@@ -95,14 +95,14 @@ jobs:
         if: steps.cache-venv.outputs.cache-hit != 'true'
         run: poetry install --no-root
 
-      - name: Cache EdgeDB CLI
+      - name: Cache EdgeDB (Gel) CLI
         id: cache-edgedb-cli
         uses: actions/cache@v4
         with:
-          key: edgedb-cli-v1-${{ runner.os }} # 운영체제별로 다르게!
-          path: ~/.edgedb
+          key: edgedb-cli-v1-${{ runner.os }}-7.8.0 # 운영체제별로 다르게, 현재 버전 명시
+          path: ~/.edgedb/cli
 
-      - name: Setup edgedb
+      - name: Setup edgedb (Gel)
         if: steps.cache-edgedb-cli.outputs.cache-hit != 'true'
         uses: geldata/setup-gel@v1
 
