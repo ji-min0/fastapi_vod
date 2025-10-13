@@ -99,15 +99,16 @@ jobs:
         id: cache-edgedb-cli
         uses: actions/cache@v4
         with:
-          key: edgedb-cli-v1-${{ runner.os }}-7.8.0 # 운영체제별로 다르게, 현재 버전 명시
-          path: ~/.edgedb/cli
+          key: edgedb-cli-v1-${{ runner.os }}-7.8.0
+          path: "~/Library/Application Support/edgedb/bin"
 
       - name: Setup edgedb (Gel)
         if: steps.cache-edgedb-cli.outputs.cache-hit != 'true'
         uses: geldata/setup-gel@v1
 
       - name: Register EdgeDB bin
-        run: echo "$HOME/.edgedb/bin" >> $GITHUB_PATH
+        run: echo "$HOME/Library/Application Support/edgedb/bin" >> $GITHUB_PATH
+
 
       - name: Run tests
         run: |
