@@ -1,13 +1,19 @@
 from datetime import datetime
 
 from fastapi import APIRouter, HTTPException
-from starlette.status import HTTP_404_NOT_FOUND, HTTP_422_UNPROCESSABLE_CONTENT
+from starlette.status import (
+    HTTP_404_NOT_FOUND,
+    HTTP_422_UNPROCESSABLE_CONTENT,
+    HTTP_204_NO_CONTENT,
+)
 
 from app.dtos.create_meeting_response import CreateMeetingResponse
 from app.dtos.get_meeting_response import GetMeetingResponse
 from app.dtos.update_meeting_request import (
     MEETING_DATE_MAX_RANGE,
     UpdateMeetingDateRangeRequest,
+    UpdateMeetingTitleRequest,
+    UpdateMeetingLocationRequest,
 )
 from app.services.meeting_service_edgedb import (
     service_create_meeting_edgedb,
@@ -113,3 +119,47 @@ async def api_update_meeting_date_range_edgedb(
 #         title="test",
 #         location="test",
 #     )
+
+
+@edgedb_router.patch(
+    "/{meeting_url_code}/title",
+    description="meeting 의 title 을 설정합니다.",
+    status_code=HTTP_204_NO_CONTENT,
+)
+async def api_update_meeting_title_edgedb(
+    meeting_url_code: str, update_meeting_title_request: UpdateMeetingTitleRequest
+) -> None:
+    return None
+
+
+# @mysql_router.patch(
+#     "/{meeting_url_code}/title",
+#     description="meeting 의 title 을 설정합니다.",
+#     status_code=HTTP_204_NO_CONTENT,
+# )
+# async def api_update_meeting_title_mysql(
+#     meeting_url_code: str, update_meeting_title_request: UpdateMeetingTitleRequest
+# ) -> None:
+#     return None
+
+
+@edgedb_router.patch(
+    "/{meeting_url_code}/location",
+    description="meeting 의 location 을 설정합니다.",
+    status_code=HTTP_204_NO_CONTENT,
+)
+async def api_update_meeting_location_edgedb(
+    meeting_url_code: str, update_meeting_location_request: UpdateMeetingLocationRequest
+) -> None:
+    return None
+
+
+# @mysql_router.patch(
+#     "/{meeting_url_code}/location",
+#     description="meeting 의 location 을 설정합니다.",
+#     status_code=HTTP_204_NO_CONTENT,
+# )
+# async def api_update_meeting_location_mysql(
+#     meeting_url_code: str, update_meeting__location_request: UpdateMeetingLocationRequest
+# ) -> None:
+#     return None
