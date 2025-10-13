@@ -95,46 +95,8 @@ jobs:
         if: steps.cache-venv.outputs.cache-hit != 'true'
         run: poetry install --no-root
 
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      # 1. EdgeDB 설치 디렉터리 전체를 올바른 경로로 캐시합니다.
-      - name: Cache EdgeDB CLI
-        id: cache-edgedb-cli
-        uses: actions/cache@v4
-        with:
-          path: ~/.edgedb
-          key: edgedb-cli-v1-${{ runner.os }}
-
-      # (디버깅용) 캐시가 실패했을 때 설치하기 전에 홈 디렉터리 목록을 확인
-      - name: Check directory before install (if cache missed)
-        if: steps.cache-edgedb-cli.outputs.cache-hit != 'true'
-        run: |
-          echo "Cache missed. Will install EdgeDB."
-          echo "--- Home directory contents ---"
-          ls -la $HOME
-
       - name: Setup EdgeDB
-        if: steps.cache-edgedb-cli.outputs.cache-hit != 'true'
         uses: geldata/setup-gel@v1
-
-      # (디버깅용) 설치 후 edgedb 폴더가 정말 생성되었는지 확인
-      - name: Check directory after install
-        if: steps.cache-edgedb-cli.outputs.cache-hit != 'true'
-        run: |
-          echo "--- Home directory contents after install ---"
-          ls -la $HOME
-          echo "--- ~/.edgedb directory contents ---"
-          ls -la ~/.edgedb
-
-      # 3. 설치 또는 캐시 복원 후 edgedb 실행 경로를 PATH에 추가
-      - name: Add EdgeDB to PATH
-        run: echo "$HOME/.edgedb/bin" >> $GITHUB_PATH
-
-      # 4. 설치 확인
-      - name: Verify EdgeDB installation
-        run: edgedb --version
-
 
       - name: Run tests
         run: |
